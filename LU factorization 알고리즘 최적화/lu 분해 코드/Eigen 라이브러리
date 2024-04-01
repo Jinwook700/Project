@@ -1,0 +1,24 @@
+#include <iostream>
+#include <Eigen/Dense>
+
+using namespace std;
+using namespace Eigen;
+
+int main() {
+    Matrix3d A;
+    A << 2, -1, 0,
+         -1, 2, -1,
+         0, -1, 2;
+
+    cout << "Matrix A:" << endl << A << endl << endl;
+
+    // LU 분해 수행
+    PartialPivLU<Matrix3d> lu(A);
+    Matrix3d L = lu.matrixLU().triangularView<StrictlyLower>();
+    Matrix3d U = lu.matrixLU().triangularView<Upper>();
+
+    cout << "Lower triangular matrix L:" << endl << L << endl << endl;
+    cout << "Upper triangular matrix U:" << endl << U << endl;
+
+    return 0;
+}
