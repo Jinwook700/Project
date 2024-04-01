@@ -1,0 +1,69 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+// LU 분해 함수
+void luFactorization(vector<vector<double>>& A, vector<vector<double>>& L, vector<vector<double>>& U) {
+    int n = A.size();
+
+    // L과 U 행렬 초기화
+    L = vector<vector<double>>(n, vector<double>(n, 0));
+    U = vector<vector<double>>(n, vector<double>(n, 0));
+
+    // LU 분해 수행
+    for (int i = 0; i < n; i++) {
+        // U 행렬의 윗 삼각 행렬 구성
+        for (int k = i; k < n; k++) {
+            double sum = 0;
+            for (int j = 0; j < i; j++)
+                sum += (L[i][j] * U[j][k]);
+            U[i][k] = A[i][k] - sum;
+        }
+
+        // L 행렬의 아래 삼각 행렬 구성
+        for (int k = i; k < n; k++) {
+            if (i == k)
+                L[i][i] = 1; // L의 대각원소는 항상 1
+            else {
+                double sum = 0;
+                for (int j = 0; j < i; j++)
+                    sum += (L[k][j] * U[j][i]);
+                L[k][i] = (A[k][i] - sum) / U[i][i];
+            }
+        }
+    }
+}
+
+int main() {
+    // 예시로 3x3 행렬 A 생성
+    vector<vector<double>> A = {
+        {2, -1, 0},
+        {-1, 2, -1},
+        {0, -1, 2}
+    };
+
+    vector<vector<double>> L, U;
+
+    // LU 분해 수행
+    luFactorization(A, L, U);
+
+    // 결과 출력
+    cout << "Lower triangular matrix L:" << endl;
+    for (const auto& row : L) {
+        for (double val : row)
+            cout << val << "\t";
+        cout << endl;
+    }
+
+    cout << endl;
+
+    cout << "Upper triangular matrix U:" << endl;
+    for (const auto& row : U) {
+        for (double val : row)
+            cout << val << "\t";
+        cout << endl;
+    }
+
+    return 0;
+}
