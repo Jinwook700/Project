@@ -1,0 +1,47 @@
+#include <iostream>
+#include <gsl/gsl_linalg.h>
+
+using namespace std;
+
+int main() {
+    // 입력 행렬
+    double data[] = { 2, -1, 1, -3, 0, 1, -2, 1, 2 };
+    gsl_matrix_view A = gsl_matrix_view_array(data, 3, 3);
+
+    // LU 분해
+    gsl_permutation *p = gsl_permutation_alloc(3);
+    int signum;
+    gsl_linalg_LU_decomp(&A.matrix, p, &signum);
+
+    // 하삼각행렬 L과 상삼각행렬 U 출력
+    cout << "Lower triangular matrix (L):" << endl;
+    for (size_t i = 0; i < A.matrix.size1; ++i) {
+        for (size_t j = 0; j < A.matrix.size2; ++j) {
+            if (i > j) {
+                cout << gsl_matrix_get(&A.matrix, i, j) << " ";
+            } else if (i == j) {
+                cout << "1 ";
+            } else {
+                cout << "0 ";
+            }
+        }
+        cout << endl;
+    }
+    cout << endl;
+
+    cout << "Upper triangular matrix (U):" << endl;
+    for (size_t i = 0; i < A.matrix.size1; ++i) {
+        for (size_t j = 0; j < A.matrix.size2; ++j) {
+            if (i <= j) {
+                cout << gsl_matrix_get(&A.matrix, i, j) << " ";
+            } else {
+                cout << "0 ";
+            }
+        }
+        cout << endl;
+    }
+
+    gsl_permutation_free(p);
+
+    return 0;
+}
