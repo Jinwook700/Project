@@ -1,0 +1,25 @@
+#include <iostream>
+#include <armadillo>
+
+using namespace std;
+using namespace arma;
+
+int main() {
+    // 입력 행렬
+    mat A = {{2, -1, 1},
+             {-3, 0, 1},
+             {-2, 1, 2}};
+    
+    // LU 분해 수행
+    mat L, U;
+    lu(L, U, A);
+    
+    // 결과 출력
+    cout << "Lower triangular matrix (L):" << endl;
+    cout << L << endl << endl;
+    
+    cout << "Upper triangular matrix (U):" << endl;
+    cout << U << endl;
+    
+    return 0;
+}
